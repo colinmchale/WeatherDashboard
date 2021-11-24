@@ -3,6 +3,12 @@
 
 let searchBtn = document.querySelector("#searchBtn");
 let searchInput = document.querySelector("#searchInput");
+let searchCity = document.querySelector("#dash-city");
+let searchTemp = document.querySelector("#dash-temp");
+let searchWind = document.querySelector("#dash-wind");
+let searchHum = document.querySelector("#dash-hum");
+let searchUV = document.querySelector("#dash-uv");
+
 let currentlat;
 let currentlon;
 let userSearch = "";
@@ -16,7 +22,6 @@ let buttonClick = function (event) {
 
     }
     console.log(userSearch)
-    searchInput.textContent = '';
 };
 
 
@@ -31,10 +36,13 @@ console.log(weatherUrl)
         response.json().then(function (weatherData) {
           console.log(weatherData);  
           console.log(weatherData.city.coord.lat); 
-          console.log(weatherData.city.coord.lon); 
+          console.log(weatherData.city.coord.lon);
+
+          searchCity.textContent = weatherData.city.name
           
           currentlat = weatherData.city.coord.lat
           currentlon = weatherData.city.coord.lon
+          displayTime()
           getOneCall(currentlat, currentlon)
         });
       } else {
@@ -53,11 +61,27 @@ var getOneCall = function (lat, lon) {
     if (response.ok) {
       response.json().then(function (oneCallData) {
         console.log(oneCallData);
+        
+        searchTemp.textContent = "Temp: " + oneCallData.current.temp + "°F"
+        searchWind.textContent = "Wind: " + oneCallData.current.wind_speed + "MPH"
+        searchHum.textContent = "Humidity: " + oneCallData.current.humidity + "%"
+        searchUV.textContent = "UV Index: " + oneCallData.current.uvi
+
       });
     } else {
       alert('Error: ' + response.statusText);
     }
   });
+};
+
+function displayTime() {
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
+  
+  today = '(' + mm + '/' + dd + '/' + yyyy + ')';
+  searchCity.append(today);
 };
 
 searchBtn.addEventListener('click', buttonClick);
