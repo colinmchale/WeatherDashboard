@@ -8,20 +8,48 @@ let searchTemp = document.querySelector("#dash-temp");
 let searchWind = document.querySelector("#dash-wind");
 let searchHum = document.querySelector("#dash-hum");
 let searchUV = document.querySelector("#dash-uv");
-
+let recentList = document.querySelector("#recentList")
 let currentlat;
 let currentlon;
 let userSearch = "";
+let recentSearchList = [];
+
+
+function renderRecentSearch() {
+  recentSearchList = localStorage.getItem("search");
+  recentSearchList = JSON.parse(recentSearchList);
+
+  if (recentSearchList <= 10) {
+    for (let i = 0; i < recentSearchList.length; i++) {
+      let nextSearch = document.createElement("a")
+
+      nextSearch.textContent = recentSearchList[i].value 
+      nextSearch.appendChild(recentList)
+    }
+  } else if (recentSearchList > 10) {
+    for (let i = 0; i < 10; i++) {
+      let nextSearch = document.createElement("a")
+      nextSearch.textContent = recentSearchList[i].value 
+      nextSearch.appendChild(recentList)
+    }
+  } else {
+    return;
+  };
+
+}
+
 
 let buttonClick = function (event) {
     event.preventDefault();
-    userSearch = searchInput.value.toLowerCase();
-    userSearch = userSearch.replace(" ", "+");
-    if (userSearch) {
-        getUserCity(userSearch);
-
+    userSearch = searchInput.value
+    fixedSearch = userSearch.toLowerCase();
+    fixedSearch = fixedSearch.replace(" ", "+");
+    if (fixedSearch) {
+        getUserCity(fixedSearch);
     }
-    console.log(userSearch)
+    console.log(fixedSearch)
+    recentSearchList.unshift(userSearch)
+    localStorage.setItem("search", JSON.stringify(recentSearchList));
 };
 
 
@@ -39,11 +67,14 @@ console.log(weatherUrl)
           console.log(weatherData.city.coord.lon);
 
           searchCity.textContent = weatherData.city.name
-          
           currentlat = weatherData.city.coord.lat
           currentlon = weatherData.city.coord.lon
           displayTime()
           getOneCall(currentlat, currentlon)
+          // for (let i = 0; i < 5; i++) {
+          //   let nextDay = 
+            
+          // }
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -77,11 +108,13 @@ var getOneCall = function (lat, lon) {
 function displayTime() {
   let today = new Date();
   let dd = String(today.getDate()).padStart(2, '0');
-  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let mm = String(today.getMonth() + 1).padStart(2, '0');
   let yyyy = today.getFullYear();
   
   today = '(' + mm + '/' + dd + '/' + yyyy + ')';
   searchCity.append(today);
 };
+
+renderRecentSearch()
 
 searchBtn.addEventListener('click', buttonClick);
