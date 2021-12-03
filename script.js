@@ -16,48 +16,64 @@ let userSearch = "";
 let recentSearchList = [];
 
 
-// function renderRecentSearch() {
-//   recentSearchList = localStorage.getItem("search");
-//   recentSearchList = JSON.parse(recentSearchList);
+function renderRecentSearch() {
 
-//   if (recentSearchList <= 10) {
-//     for (let i = 0; i < recentSearchList.length; i++) {
-//       let nextSearch = document.createElement("a")
+  let recentSearch = localStorage.getItem("search");
+  recentSearch = JSON.parse(recentSearch);
+  console.log(recentSearch);
+    
 
-//       nextSearch.textContent = recentSearchList[i].value 
-//       nextSearch.appendChild(recentList)
-//     }
-//   } else if (recentSearchList > 10) {
-//     for (let i = 0; i < 10; i++) {
-//       let nextSearch = document.createElement("a")
-//       nextSearch.textContent = recentSearchList[i].value 
-//       nextSearch.appendChild(recentList)
-//     }
-//   } else {
-//     return;
-//   };
-
-// }
-
-
-let buttonClick = function (event) {
-    event.preventDefault();
-    userSearch = searchInput.value
-    fixedSearch = userSearch.toLowerCase();
-    fixedSearch = fixedSearch.replace(" ", "+");
-    if (fixedSearch) {
-        getUserCity(fixedSearch);
+  for (let i = 0; i < 10; i++) {
+    if (recentSearch[i]) {
+     let nextSearch = document.createElement("button");
+      nextSearch.setAttribute("type", "button");
+      nextSearch.setAttribute("class", "recentBtn");
+      nextSearch.textContent = recentSearch[i];
+      recentList.appendChild(nextSearch);
+    } else {
+      return;
     }
-    console.log(fixedSearch)
-    recentSearchList.unshift(userSearch)
-    localStorage.setItem("search", JSON.stringify(recentSearchList));
+  };
+
+  if(recentSearch){
+    let recentBtn = document.querySelector(".recentBtn");
+    recentBtn.addEventListener('click', getUserCity(recentBtn.text));
+  }
 };
 
 
-let getUserCity = function (city) {
+
+// let buttonClick = function (event) {
+//     event.preventDefault();
+//     userSearch = searchInput.value;
+//     fixedSearch = userSearch.toLowerCase();
+//     fixedSearch = fixedSearch.replace(" ", "+");
+//     if (fixedSearch) {
+//         getUserCity(fixedSearch);
+//     };
+//     console.log(fixedSearch);
+//     renderRecentSearch(userSearch);
+//     recentSearchList.unshift(userSearch);
+//     localStorage.setItem("search", JSON.stringify(recentSearchList));
+//     console.log(recentSearchList);
+// };
+
+let getUserCity = function (event) {
+
+  event.preventDefault();
+  userSearch = searchInput.value;
+  city = userSearch.toLowerCase();
+  city = city.replace(" ", "+");
+  
+  console.log(city);
+  renderRecentSearch(userSearch);
+  recentSearchList.unshift(userSearch);
+  localStorage.setItem("search", JSON.stringify(recentSearchList));
+  console.log(recentSearchList);
+
+if (city) {
   let weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bd9cbe396241dde8b22cf3304aff6d9e';
 console.log(weatherUrl)
-
 
   fetch(weatherUrl)
     .then(function (response) {
@@ -113,6 +129,7 @@ console.log(weatherUrl)
     .catch(function (error) {
       alert('Unable to connect to GitHub');
     });
+  };
 };
 
 var getOneCall = function (lat, lon) {
@@ -128,7 +145,13 @@ var getOneCall = function (lat, lon) {
         searchHum.textContent = "Humidity: " + oneCallData.current.humidity + "%";
         searchUV.textContent = "UV Index: " + oneCallData.current.uvi;
 
-        
+        if (oneCallData.current.uvi >= 6.5) {
+          searchUV.setAttribute("background-color", "red")
+        } else if (oneCallData.current.uvi <= 2.5) {
+          searchUV.setAttribute("background-color", "green")
+        } else {
+          searchUV.setAttribute("background-color", "yellow")
+        };
 
       });
     } else {
@@ -149,6 +172,7 @@ function displayTime() {
   searchCity.append(today);
 };
 
-// renderRecentSearch()
+renderRecentSearch()
 
-searchBtn.addEventListener('click', buttonClick);
+searchBtn.addEventListener('click', getUserCity);
+
