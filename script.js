@@ -9,34 +9,35 @@ let searchWind = document.querySelector("#dash-wind");
 let searchHum = document.querySelector("#dash-hum");
 let searchUV = document.querySelector("#dash-uv");
 let recentList = document.querySelector("#recentList")
+let fiveDay = document.querySelector("#five-day");
 let currentlat;
 let currentlon;
 let userSearch = "";
 let recentSearchList = [];
 
 
-function renderRecentSearch() {
-  recentSearchList = localStorage.getItem("search");
-  recentSearchList = JSON.parse(recentSearchList);
+// function renderRecentSearch() {
+//   recentSearchList = localStorage.getItem("search");
+//   recentSearchList = JSON.parse(recentSearchList);
 
-  if (recentSearchList <= 10) {
-    for (let i = 0; i < recentSearchList.length; i++) {
-      let nextSearch = document.createElement("a")
+//   if (recentSearchList <= 10) {
+//     for (let i = 0; i < recentSearchList.length; i++) {
+//       let nextSearch = document.createElement("a")
 
-      nextSearch.textContent = recentSearchList[i].value 
-      nextSearch.appendChild(recentList)
-    }
-  } else if (recentSearchList > 10) {
-    for (let i = 0; i < 10; i++) {
-      let nextSearch = document.createElement("a")
-      nextSearch.textContent = recentSearchList[i].value 
-      nextSearch.appendChild(recentList)
-    }
-  } else {
-    return;
-  };
+//       nextSearch.textContent = recentSearchList[i].value 
+//       nextSearch.appendChild(recentList)
+//     }
+//   } else if (recentSearchList > 10) {
+//     for (let i = 0; i < 10; i++) {
+//       let nextSearch = document.createElement("a")
+//       nextSearch.textContent = recentSearchList[i].value 
+//       nextSearch.appendChild(recentList)
+//     }
+//   } else {
+//     return;
+//   };
 
-}
+// }
 
 
 let buttonClick = function (event) {
@@ -71,10 +72,39 @@ console.log(weatherUrl)
           currentlon = weatherData.city.coord.lon
           displayTime()
           getOneCall(currentlat, currentlon)
-          // for (let i = 0; i < 5; i++) {
-          //   let nextDay = 
-            
-          // }
+          
+          for (let i = 0; i < 6; i++) {
+            let card = document.createElement("div");
+            card.setAttribute("class", "card bg-dark text-white");
+            fiveDay.appendChild(card);
+
+            let picture = document.createElement("img");
+            picture.setAttribute("class", "card-img");
+            // picture.setAttribute("src", "card-img");
+            // picture.setAttribute("alt", "card-img");
+            card.append(picture)
+
+            let imgOverlay = document.createElement("div");
+            imgOverlay.setAttribute("class", "card-img-overlay");
+            card.append(imgOverlay);
+
+            let cardTitle = document.createElement("h5");
+            cardTitle.setAttribute("class", "card-title");
+            cardTitle.textContent = "Day" + i;
+            imgOverlay.appendChild(cardTitle);
+
+            let nextTemp = document.createElement("p");
+            nextTemp.textContent = "Temp: " + weatherData.list[i].main.temp + "°F";
+            imgOverlay.append(nextTemp);
+
+            let nextWind = document.createElement("p");
+            nextWind.textContent = "Wind: " + weatherData.list[i].main.temp + "MPH";
+            imgOverlay.append(nextWind);
+
+            let nextHum = document.createElement("p");
+            nextHum.textContent = "Humidity: " + weatherData.list[i].main.humidity + "%";
+            imgOverlay.append(nextHum);
+          }
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -93,10 +123,12 @@ var getOneCall = function (lat, lon) {
       response.json().then(function (oneCallData) {
         console.log(oneCallData);
         
-        searchTemp.textContent = "Temp: " + oneCallData.current.temp + "°F"
-        searchWind.textContent = "Wind: " + oneCallData.current.wind_speed + "MPH"
-        searchHum.textContent = "Humidity: " + oneCallData.current.humidity + "%"
-        searchUV.textContent = "UV Index: " + oneCallData.current.uvi
+        searchTemp.textContent = "Temp: " + oneCallData.current.temp + "°F";
+        searchWind.textContent = "Wind: " + oneCallData.current.wind_speed + "MPH";
+        searchHum.textContent = "Humidity: " + oneCallData.current.humidity + "%";
+        searchUV.textContent = "UV Index: " + oneCallData.current.uvi;
+
+        
 
       });
     } else {
@@ -104,6 +136,8 @@ var getOneCall = function (lat, lon) {
     }
   });
 };
+
+
 
 function displayTime() {
   let today = new Date();
@@ -115,6 +149,6 @@ function displayTime() {
   searchCity.append(today);
 };
 
-renderRecentSearch()
+// renderRecentSearch()
 
 searchBtn.addEventListener('click', buttonClick);
