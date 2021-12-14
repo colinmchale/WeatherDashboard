@@ -16,30 +16,30 @@ let userSearch = "";
 let recentSearchList = [];
 
 
-function renderRecentSearch() {
+// function renderRecentSearch() {
 
-  let recentSearch = localStorage.getItem("search");
-  recentSearch = JSON.parse(recentSearch);
-  console.log(recentSearch);
+//   let recentSearch = localStorage.getItem("search");
+//   recentSearch = JSON.parse(recentSearch);
+//   console.log(recentSearch);
     
 
-  for (let i = 0; i < 10; i++) {
-    if (recentSearch[i]) {
-     let nextSearch = document.createElement("button");
-      nextSearch.setAttribute("type", "button");
-      nextSearch.setAttribute("class", "recentBtn");
-      nextSearch.textContent = recentSearch[i];
-      recentList.appendChild(nextSearch);
-    } else {
-      return;
-    }
-  };
+//   for (let i = 0; i < 10; i++) {
+//     if (recentSearch[i]) {
+//      let nextSearch = document.createElement("button");
+//       nextSearch.setAttribute("type", "button");
+//       nextSearch.setAttribute("class", "recentBtn");
+//       nextSearch.textContent = recentSearch[i];
+//       recentList.appendChild(nextSearch);
+//     } else {
+//       return;
+//     }
+//   };
 
-  if(recentSearch){
-    let recentBtn = document.querySelector(".recentBtn");
-    recentBtn.addEventListener('click', getUserCity(recentBtn.text));
-  }
-};
+//   if(recentSearch){
+//     let recentBtn = document.querySelector(".recentBtn");
+//     recentBtn.addEventListener('click', getUserCity(recentBtn.text));
+//   }
+// };
 
 
 
@@ -59,16 +59,53 @@ function renderRecentSearch() {
 // };
 
 let getUserCity = function (event) {
-
   event.preventDefault();
-  userSearch = searchInput.value;
+  let city = searchInput.value.trim();
+  if (city) {
+    getWeather(city);
+    recentSearchList.unshift(city);
+    searchInput.value = '';
+  }
+
+
+  localStorage.setItem("cities", JSON.stringify(recentSearchList));
+}
+
+let getWeather = function (city) {
+
+  
+
+  let weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bd9cbe396241dde8b22cf3304aff6d9e';
+  console.log(weatherUrl)
+  
+    fetch(weatherUrl)
+      .then(function (response) {
+        if (response.ok) {
+          response.json().then(function (weatherData) {
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+  
+  userSearch = ;
   city = userSearch.toLowerCase();
   city = city.replace(" ", "+");
   
   console.log(city);
   renderRecentSearch(userSearch);
   recentSearchList.unshift(userSearch);
-  localStorage.setItem("search", JSON.stringify(recentSearchList));
+  
   console.log(recentSearchList);
 
 if (city) {
@@ -175,4 +212,4 @@ function displayTime() {
 renderRecentSearch()
 
 searchBtn.addEventListener('click', getUserCity);
-
+pastSearchBtn.addEventListener('click', getPastUserCity);
