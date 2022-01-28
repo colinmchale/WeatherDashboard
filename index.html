@@ -24,16 +24,23 @@
                 <button class="btn btn-block bg-success text-white mt-1">Search</button>
               </form>
         
-              <p>This is for recent searches</p>
+              <ul id="recent-list"></ul>
             </div>
         
             <div class="col-12 col-md-9 p-3">
-                <div class="jumbotron bg-primary text-light p-3">
-                    <h2 class="display-6">Showing results here</h2>
-                    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                    <hr class="my-4">    
+                <div class="justify-content-center jumbotron bg-primary text-light p-3 rounded">
+                    <h2 class="display-6 m-4" id="dash-city"></h2>
+                    <p class="m-4" id="current-date"></p>
+                    <hr class="my-4">
+                    <div class="d-flex flex-wrap">
+                      <span class="m-4" id="dash-temp"></span>
+                      <span class="m-4" id="dash-wind"></span>
+                      <span class="m-4" id="dash-hum"></span>
+                      <span class="m-4" id="dash-uv"></span>
+                    </div>
+                    
                 </div>
-                <div id="five-day"></div>
+                <div class="d-flex flex-wrap" id="five-day"></div>
             </div>
         </div>
 
