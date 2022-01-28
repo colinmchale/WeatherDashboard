@@ -1,11 +1,10 @@
-// Script Sheet
-let searchBtn = document.querySelector("#searchBtn");
+let searchForm = document.querySelector("#searchForm");
 let searchInput = document.querySelector("#searchInput");
-let searchCity = document.querySelector("#dash-city");
-let searchTemp = document.querySelector("#dash-temp");
-let searchWind = document.querySelector("#dash-wind");
-let searchHum = document.querySelector("#dash-hum");
-let searchUV = document.querySelector("#dash-uv");
+let searchedCity = document.querySelector("#dash-city");
+let searchedTemp = document.querySelector("#dash-temp");
+let searcedhWind = document.querySelector("#dash-wind");
+let searcedhHum = document.querySelector("#dash-hum");
+let searchedUV = document.querySelector("#dash-uv");
 let recentList = document.querySelector("#recentList")
 let fiveDay = document.querySelector("#five-day");
 let userSearch = "";
@@ -54,29 +53,18 @@ let recentSearchList = [];
 //     console.log(recentSearchList);
 // };
 
-let getUserCity = function (event) {
-  event.preventDefault();
-                              // Cannot pull value from the input element!!!
-  let city = searchInput.value;
-
+let getCity = function (search) {
+  let city = search.toLowerCase();
+  city = city.replace(" ", "+");
   console.log(city);
-
-  // if (city) {
-  //   recentSearchList.unshift(city);
-  //   let fixedCity = city.toLowerCase();
-  //   fixedCity = fixedCity.replace(" ", "+");
-  //   getWeather(fixedCity)
-  //   searchInput.value = '';
-  // }
-
+  getWeather(city)
 
   // localStorage.setItem("cities", JSON.stringify(recentSearchList));
 }
 
 let getWeather = function (city) {
   let weatherUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bd9cbe396241dde8b22cf3304aff6d9e';
-  console.log(weatherUrl)
-  
+  // console.log(weatherUrl)
     fetch(weatherUrl)
       .then(function (response) {
         if (response.ok) {
@@ -89,23 +77,59 @@ let getWeather = function (city) {
     };  
 
 
-let displayWeather = function (weather, city) {
+let displayWeather = function (weatherData, city) {
+  console.log(city);
 
-
-
+  fiveDay.textContent = '';
   // let currentDate = document.createElement("span");
   // currentDate.textContent=" (" + moment(weather.dt.value).format("MMM D, YYYY") + ") ";
   
+  for (let i = 0; i < 6; i++) {
+    let card = document.createElement("div");
+    card.classList.add("card", "m-1", "bg-primary", "text-light");
+    card.setAttribute("style", "max-width: 18rem;");
+    fiveDay.appendChild(card);
 
-  console.log(city);
+    let cardHeader = document.createElement("div");
+    card.classList.add("card-header");
+    card.appendChild(cardHeader);
 
-
-
-
-  let lat = weather.city.coord.lat
-  let lon = weather.city.coord.lon
+    let cardBody = document.createElement("div");
+    card.classList.add("card-body");
+    card.appendChild(cardBody);
+  
+    // let picture = document.createElement("img");
+    // picture.setAttribute("class", "card-img");
+    // // picture.setAttribute("src", "card-img");
+    // // picture.setAttribute("alt", "card-img");
+    // card.append(picture)
+  
+    // let imgOverlay = document.createElement("div");
+    // imgOverlay.setAttribute("class", "card-img-overlay");
+    // card.append(imgOverlay);
+  
+    let cardTitle = document.createElement("h5");
+    cardTitle.classList.add("card-title");
+    cardTitle.textContent = "Day" + i;
+    cardBody.appendChild(cardTitle);
+  
+    let nextTemp = document.createElement("p");
+    nextTemp.textContent = "Temp: " + weatherData.list[i].main.temp + "°F";
+    cardBody.append(nextTemp);
+  
+    let nextWind = document.createElement("p");
+    nextWind.textContent = "Wind: " + weatherData.list[i].main.temp + "MPH";
+    cardBody.append(nextWind);
+  
+    let nextHum = document.createElement("p");
+    nextHum.textContent = "Humidity: " + weatherData.list[i].main.humidity + "%";
+    cardBody.append(nextHum);
+  };
+  
+  let lat = weatherData.city.coord.lat
+  let lon = weatherData.city.coord.lon
   getUVIndex(lat, lon)
-}
+};
 
 
 let getUVIndex = function (lat, lon) {
@@ -220,8 +244,19 @@ let getUVIndex = function (lat, lon) {
 //   });
 // };
 
+function handleFormSubmit(event) {
+  event.preventDefault();
+  let searchInputVal = searchInput.value;
 
-// renderRecentSearch()
+  if (!searchInputVal) {
+    console.error('You need to enter a city!');
+    return;
+  }
+  console.log(searchInputVal);
+  getCity(searchInputVal);
+  // saveCity(searchInputVal);
+  searchInputVal = '';
+}
 
-searchBtn.addEventListener('click', getUserCity);
+searchForm.addEventListener('submit', handleFormSubmit);
 // pastSearchBtn.addEventListener('click', getPastUserCity);

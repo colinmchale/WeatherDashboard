@@ -12,43 +12,30 @@
     </head>
     <body>
         <nav class="navbar navbar-light bg-success justify-content-center">
-            <span class="navbar-brand mb-2 h1">Weather Dashboard</span>
+            <h1 class="mb-2 h1 text-white">Weather Dashboard</h1>
         </nav>
 
-        <main class="container mt-5">
-            <div class="row">
-                <section class="col-4">
-                    <h4>Search for a City:</h$>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="#searchInput" placeholder="Enter City Name" aria-label="Enter City Name">
-                        <div class="input-group-append">
-                          <button class="btn btn-success" type="button" id="searchBtn">Search</button>
-                        </div>
-                    </div>
-                </section>
-                <section class="col-8">
-                    <div class="container text-white bg-secondary rounded">
-                        <div>
-                            
-                        </div>
-                        
-                        <h3 class="display-3 dash-city">City</h3>
-                        <p id="dash-temp">TEMP</p>
-                        <p id="dash-wind">WIND</p>
-                        <p id="dash-hum">HUM</p>
-                        <p id="dash-uv">UV</p>
-                    </div>
-                </section>
-                <section class="row">
-                    <div class="col-12">
-                        <h4>5-Day Forecast:</h4>
-                    </div>
-                </section>
-                <div class="row" id="five-day">
-                    
-                </div>    
+        <div class="flex-row align-start align-stretch-md align-content-start align-content-stretch-md min-100-vh">
+            <div class="col-12 col-md-3 bg-light p-3">
+              <h2 class="text-primary">Search for a City:</h2>
+              <form id="searchForm" class="mb-2">
+                <input id="searchInput" class="form-input w-100" type="text" placeholder="Enter City Here">
+                
+                <button class="btn btn-block bg-success text-white mt-1">Search</button>
+              </form>
+        
+              <p>This is for recent searches</p>
             </div>
-        </main>
+        
+            <div class="col-12 col-md-9 p-3">
+                <div class="jumbotron bg-primary text-light p-3">
+                    <h2 class="display-6">Showing results here</h2>
+                    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                    <hr class="my-4">    
+                </div>
+                <div id="five-day"></div>
+            </div>
+        </div>
 
         <script src="/script.js"></script>
     </body>
