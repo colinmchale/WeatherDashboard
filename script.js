@@ -8,6 +8,7 @@ let searchUV = document.querySelector("#dash-uv");
 let recentList = document.querySelector("#recent-list")
 let fiveDay = document.querySelector("#five-day");
 let currentDate = document.querySelector("#current-date");
+let pastSearchCity = document.querySelector(".past-search");
 let userSearch = "";
 let recentSearchList = [];
 
@@ -16,73 +17,22 @@ function temperature(kelvin) {
   return temp;
 };
 
-// const date = new Date().toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) 
-// function formatDate(date, format) {
-// }
-
-
-
-
-// formatDate(today, 'mm/dd/yy');
-
-// function renderRecentSearch() {
-
-//   let recentSearch = localStorage.getItem("search");
-//   recentSearch = JSON.parse(recentSearch);
-//   console.log(recentSearch);
-    
-
-//   for (let i = 0; i < 10; i++) {
-//     if (recentSearch[i]) {
-//      let nextSearch = document.createElement("button");
-//       nextSearch.setAttribute("type", "button");
-//       nextSearch.setAttribute("class", "recentBtn");
-//       nextSearch.textContent = recentSearch[i];
-//       recentList.appendChild(nextSearch);
-//     } else {
-//       return;
-//     }
-//   };
-
-//   if(recentSearch){
-//     let recentBtn = document.querySelector(".recentBtn");
-//     recentBtn.addEventListener('click', getUserCity(recentBtn.text));
-//   }
-// };
-
-
-
-// let buttonClick = function (event) {
-//     event.preventDefault();
-//     userSearch = searchInput.value;
-//     fixedSearch = userSearch.toLowerCase();
-//     fixedSearch = fixedSearch.replace(" ", "+");
-//     if (fixedSearch) {
-//         getUserCity(fixedSearch);
-//     };
-//     console.log(fixedSearch);
-//     renderRecentSearch(userSearch);
-//     recentSearchList.unshift(userSearch);
-//     localStorage.setItem("search", JSON.stringify(recentSearchList));
-//     console.log(recentSearchList);
-// };
-
 let getCity = function (search) {
   let city = search.toLowerCase();
   city = city.replace(" ", "+");
   // console.log(city);
   getWeather(city)
-
-  // localStorage.setItem("cities", JSON.stringify(recentSearchList));
 };
 
 let saveCity = function (city) {
   recentSearchList.unshift(city);
   localStorage.setItem("cities", JSON.stringify(recentSearchList));
+  console.log(recentSearchList)
   renderRecentCities();
 };
 
 let renderRecentCities = function() {
+  recentList.textContent = '';
   let recentCities = JSON.parse(localStorage.getItem("cities"));
   console.log(recentCities);
   if(recentCities){
@@ -90,10 +40,10 @@ let renderRecentCities = function() {
       let cityList = document.createElement("li");
       // cityList.classList.add("");
       recentList.appendChild(cityList);
-
-      let cityTag = document.createElement("a");
-      cityTag.setAttribute("href", "")
-      cityTag.textContent = recentCities[i]
+      let thisCity = recentCities[i]
+      let cityTag = document.createElement("button");
+      cityTag.classList.add("past-search", "btn", "text-primary");
+      cityTag.textContent = thisCity
       cityList.appendChild(cityTag);
     };
   };
@@ -113,7 +63,6 @@ let getWeather = function (city) {
       })
     };  
 
-
 let displayWeather = function (weatherData, city) {
   // console.log(city);
 
@@ -123,8 +72,8 @@ let displayWeather = function (weatherData, city) {
   
   
 
-  for (let i = 0; i < 5; i++) {
-    let j = i * 7
+  for (let i = 1; i < 6; i++) {
+    let j = (i * 8) - 1
     let card = document.createElement("div");
     card.classList.add("card", "m-1", "bg-primary", "text-light");
     card.setAttribute("style", "max-width: 18rem;");
@@ -154,7 +103,6 @@ let displayWeather = function (weatherData, city) {
     // console.log(date);
     const d = new Date(date);
     let dayOfWeek = d.getDay();
-    // let dayOfWeek = date.getDay()
     let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     cardTitle.textContent = weekday[dayOfWeek]
     cardBody.appendChild(cardTitle);
@@ -178,7 +126,6 @@ let displayWeather = function (weatherData, city) {
   getUVIndex(lat, lon)
 };
 
-
 let getUVIndex = function (lat, lon) {
   let uvUrl = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&exclude=minutely,hourly,daily,alerts&appid=bd9cbe396241dde8b22cf3304aff6d9e';
 
@@ -191,7 +138,6 @@ let getUVIndex = function (lat, lon) {
     }
   })
 }; 
-
 
 let displayUV = function (uvData) {
 
@@ -218,12 +164,16 @@ function handleFormSubmit(event) {
     console.error('You need to enter a city!');
     return;
   }
-  // console.log(searchInputVal);
+  console.log(searchInput.value);
   getCity(searchInputVal);
   saveCity(searchInputVal);
-  searchInputVal = '';
+  searchInput.value = '';
+};
+
+function handleClick(event) {
+  getCity(event.target.textContent);
 };
 
 renderRecentCities();
 searchForm.addEventListener('submit', handleFormSubmit);
-// pastSearchBtn.addEventListener('click', getPastUserCity);
+recentList.addEventListener('click', handleClick);
