@@ -17,6 +17,34 @@ function temperature(kelvin) {
   return temp;
 };
 
+function getDate() {
+  let today = new Date();
+  let dayIndex = String(today.getDay()).padStart(1, '0');
+  console.log(dayIndex)
+  let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  let d = weekday[dayIndex]
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0');
+  let yyyy = today.getFullYear();
+
+  today = d + ' (' + mm + '/' + dd + '/' + yyyy + ')';
+  return today;
+};
+
+function getWeatherEmoji(weather) {
+  if (weather == 'Clouds') {
+    return '⛅';
+  } else if (weather == 'Clear') {
+    return '☀️';
+  } else if (weather == 'Snow') {
+    return '🌨️';
+  } else if (weather == 'Rain') {
+    return '🌧️';
+  }else {
+    return '🌩️';
+  }
+};
+
 let getCity = function (search) {
   let city = search.toLowerCase();
   city = city.replace(" ", "+");
@@ -65,13 +93,15 @@ let getWeather = function (city) {
 
 let displayWeather = function (weatherData, city) {
   // console.log(city);
-
   fiveDay.textContent = '';
-  searchCity.textContent = weatherData.city.name;
-  // currentDate.textContent = getDate();
-  
-  
+  let getConditions = weatherData.list[0].weather[0].main;
+  // console.log(getConditions);
+  let weatherEmoji = getWeatherEmoji(getConditions)
+  searchCity.textContent = weatherData.city.name + '  ' + weatherEmoji;
+  let displayDate = getDate();
+  currentDate.textContent = displayDate;
 
+  
   for (let i = 1; i < 6; i++) {
     let j = (i * 8) - 1
     let card = document.createElement("div");
@@ -104,7 +134,9 @@ let displayWeather = function (weatherData, city) {
     const d = new Date(date);
     let dayOfWeek = d.getDay();
     let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    cardTitle.textContent = weekday[dayOfWeek]
+    let nextConditions = weatherData.list[j].weather[0].main;
+    let nextWeatherEmoji = getWeatherEmoji(nextConditions)
+    cardTitle.textContent = weekday[dayOfWeek] + ' ' + nextWeatherEmoji;
     cardBody.appendChild(cardTitle);
   
     let nextTemp = document.createElement("p");
