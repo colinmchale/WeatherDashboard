@@ -20,7 +20,7 @@ function temperature(kelvin) {
 function getDate() {
   let today = new Date();
   let dayIndex = String(today.getDay()).padStart(1, '0');
-  console.log(dayIndex)
+  // console.log(dayIndex)
   let weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   let d = weekday[dayIndex]
   let dd = String(today.getDate()).padStart(2, '0');
@@ -55,14 +55,14 @@ let getCity = function (search) {
 let saveCity = function (city) {
   recentSearchList.unshift(city);
   localStorage.setItem("cities", JSON.stringify(recentSearchList));
-  console.log(recentSearchList)
+  // console.log(recentSearchList)
   renderRecentCities();
 };
 
 let renderRecentCities = function() {
   recentList.textContent = '';
   let recentCities = JSON.parse(localStorage.getItem("cities"));
-  console.log(recentCities);
+  // console.log(recentCities);
   if(recentCities){
     for (let i = 0; i < recentCities.length; i++) {
       let cityList = document.createElement("li");
@@ -84,7 +84,7 @@ let getWeather = function (city) {
       .then(function (response) {
         if (response.ok) {
           response.json().then(function (weatherData) {
-            console.log(weatherData)
+            // console.log(weatherData)
             displayWeather(weatherData, city)
           })
         }
@@ -116,16 +116,6 @@ let displayWeather = function (weatherData, city) {
     let cardBody = document.createElement("div");
     card.classList.add("card-body");
     card.appendChild(cardBody);
-  
-    // let picture = document.createElement("img");
-    // picture.setAttribute("class", "card-img");
-    // // picture.setAttribute("src", "card-img");
-    // // picture.setAttribute("alt", "card-img");
-    // card.append(picture)
-  
-    // let imgOverlay = document.createElement("div");
-    // imgOverlay.setAttribute("class", "card-img-overlay");
-    // card.append(imgOverlay);
   
     let cardTitle = document.createElement("h5");
     cardTitle.classList.add("card-title");
@@ -164,7 +154,7 @@ let getUVIndex = function (lat, lon) {
   fetch(uvUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (uvData) {
-        console.log(uvData);
+        // console.log(uvData);
         displayUV(uvData);
       })
     }
@@ -196,7 +186,7 @@ function handleFormSubmit(event) {
     console.error('You need to enter a city!');
     return;
   }
-  console.log(searchInput.value);
+  // console.log(searchInput.value);
   getCity(searchInputVal);
   saveCity(searchInputVal);
   searchInput.value = '';
