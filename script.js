@@ -105,7 +105,7 @@ let displayWeather = function (weatherData, city) {
   for (let i = 1; i < 6; i++) {
     let j = (i * 8) - 1
     let card = document.createElement("div");
-    card.classList.add("card", "m-1", "bg-primary", "text-light");
+    card.classList.add("card", "m-1", "bg-primary", "text-light", "shadow");
     card.setAttribute("style", "max-width: 18rem;");
     fiveDay.appendChild(card);
 
