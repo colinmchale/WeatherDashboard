@@ -2,7 +2,7 @@
 ![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)
 
 ## Description  
-This dashboard provides a clear view into the current weather condtions of a major city in the US, as well as a five day preview of what weather is to come. The search bar enables users to look for a city and immediately receives current and future conitions. Once the user submits info the page will automatically load the response.
+This dashboard provides a clear view into the current weather condtions of a major city in the US, as well as a five day preview of what weather is to come. The search bar enables users to look for a city and immediately receives current and future conditions. Once the user submits info the page will automatically load the response. After a city is searched for, that city will be displayed in the "Recent Searches" section of the search box.
 
 ## Table of Contents  
 [Description](#description)    
@@ -12,8 +12,8 @@ This dashboard provides a clear view into the current weather condtions of a maj
 [Questions](#questions)  
 
 ## Usage  
-![Screenshot of App]()
-[Link to Deployed App]()
+![Screenshot of App](./WeatherDashboard.png)
+[Link to Deployed App](https://colinmchale.github.io/WeatherDashboard/)
 
 ## License 
 MPL 2.0
